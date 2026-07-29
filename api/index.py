@@ -7,20 +7,24 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 from flask import Flask, request, jsonify, Response, send_from_directory
 
-# Serve static files from the "public" folder
-PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "..", "public")
+from flask import Flask, request, jsonify, Response, send_from_directory
+import os
 
-app = Flask(__name__, static_folder=PUBLIC_DIR)
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-# Homepage
+app = Flask(__name__)
+
 @app.route("/")
 def home():
-    return send_from_directory(PUBLIC_DIR, "index.html")
+    return send_from_directory(ROOT_DIR, "index.html")
 
-# Converter page
+@app.route("/index.html")
+def index():
+    return send_from_directory(ROOT_DIR, "index.html")
+
 @app.route("/converter.html")
 def converter():
-    return send_from_directory(PUBLIC_DIR, "converter.html")
+    return send_from_directory(ROOT_DIR, "converter.html")
 
 TMP_DIR = "/tmp" if os.path.exists("/tmp") else os.path.join(os.getcwd(), "temp_export")
 os.makedirs(TMP_DIR, exist_ok=True)
