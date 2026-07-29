@@ -5,9 +5,22 @@ import zipfile
 import shutil
 import urllib.parse
 import xml.etree.ElementTree as ET
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_from_directory
 
-app = Flask(__name__)
+# Serve static files from the "public" folder
+PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "..", "public")
+
+app = Flask(__name__, static_folder=PUBLIC_DIR)
+
+# Homepage
+@app.route("/")
+def home():
+    return send_from_directory(PUBLIC_DIR, "index.html")
+
+# Converter page
+@app.route("/converter.html")
+def converter():
+    return send_from_directory(PUBLIC_DIR, "converter.html")
 
 TMP_DIR = "/tmp" if os.path.exists("/tmp") else os.path.join(os.getcwd(), "temp_export")
 os.makedirs(TMP_DIR, exist_ok=True)
@@ -16,7 +29,6 @@ active_presentation = {
     "name": "presentation",
     "html": None
 }
-
 @app.route('/api/upload', methods=['POST'])
 @app.route('/upload', methods=['POST'])
 def handle_upload():
