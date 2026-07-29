@@ -288,7 +288,7 @@
           }
         }, 400);
 
-        const response = await fetch('/upload', {
+        const response = await fetch('/api/upload', {
           method: 'POST',
           headers: {
             'X-File-Name': encodeURIComponent(selectedFile.name)
